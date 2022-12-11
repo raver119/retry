@@ -75,7 +75,7 @@ func UntilSuccessWithDelay(delay time.Duration, f func() error) error {
 }
 
 // UntilSuccessOrTimeout retries the given function until it returns true or the timeout is reached
-func UntilSuccessOrTimeout(ctx context.Context, f func() error, timeout time.Duration) error {
+func UntilSuccessOrTimeout(ctx context.Context, timeout time.Duration, f func() error) error {
 	start := time.Now()
 	for {
 		if err := f(); err == nil {
