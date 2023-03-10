@@ -160,3 +160,22 @@ func Thrice(f func() error) error {
 func ThriceWithSmallDelay(f func() error) error {
 	return MultipleTimesWithDelay(3, 100*time.Millisecond, f)
 }
+
+// UntilSuccededOrCancelled function will retry the given function until it returns no error or is cancelled via the context.
+func UntilSucceededOrCancelledWithDelay(ctx context.Context, delay time.Duration, f func() error) error {
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+			if err := f(); err == nil {
+				return nil
+			}
+
+			// sleep for the given delay, if set
+			if delay > 0 {
+				time.Sleep(delay)
+			}
+		}
+	}
+}
